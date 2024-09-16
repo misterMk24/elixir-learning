@@ -65,7 +65,7 @@ defmodule Helpers do
 
   defp convert_to_atom(operator) do
     try do
-      {:ok, String.to_atom(operator)}
+      {:ok, String.to_existing_atom(operator)}
     rescue ArgumentError ->
       {:error, convert_error_message(operator)}
     end
