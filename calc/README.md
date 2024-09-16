@@ -36,7 +36,7 @@ iex -S mix
 #### Example:
 
 ```elixir
-Calc.start()
+> Calc.start()
 Enter your expression:
 > 1 + 2
 Result: 3.0
