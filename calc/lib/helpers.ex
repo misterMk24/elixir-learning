@@ -3,8 +3,6 @@ defmodule Helpers do
   Helpers module for parsing and converting data purposes
   """
 
-  @allowed_parsed_elements 3
-
   @doc """
   Initial User input parsing with regular expression
 
@@ -14,10 +12,10 @@ defmodule Helpers do
   """
   @spec parse_input(String.t()) :: {:ok, tuple()} | {:error, String.t()}
   def parse_input(input) do
-    parsed_input = Regex.scan(~r{\d+\.?\d+|\d+|[+*/-]|[\w]+}, input) |> List.flatten() |> List.to_tuple()
-
-    case tuple_size(parsed_input) do
-      @allowed_parsed_elements -> {:ok, parsed_input}
+    ~r{[-]?\d+(?:\.\d+)?|[+*/-]|\w+}
+    |> Regex.scan(input, capture: :first)
+    |> case do
+      [[num1], [sign], [num2]] -> {:ok, {num1, sign, num2}}
       _ -> {:error, "incorrect input has been provided"}
     end
   end
@@ -30,8 +28,7 @@ defmodule Helpers do
       {:ok, {1.0, :*, 2.0}}
   """
   @spec convert_data(tuple()) :: {:ok, tuple()} | {:error, String.t()}
-  def convert_data(parsed_input) do
-    {var1, operator, var2} = parsed_input
+  def convert_data({var1, operator, var2}) do
     with {:ok, var1} <- convert_to_float(var1),
          {:ok, var2} <- convert_to_float(var2),
          {:ok, operator} <- convert_to_atom(operator) do
@@ -58,20 +55,19 @@ defmodule Helpers do
 
   defp convert_to_float(var) do
     case Float.parse(String.trim(var)) do
-      {var, _} -> {:ok, var}
+      {var, ""} -> {:ok, var}
+      {var, _trailing_garbage} -> {:error, "trailing garbage in ‹#{var}›"}
       :error -> {:error, convert_error_message(var)}
     end
   end
 
   defp convert_to_atom(operator) do
-    try do
-      {:ok, String.to_existing_atom(operator)}
-    rescue ArgumentError ->
-      {:error, convert_error_message(operator)}
-    end
+    {:ok, String.to_existing_atom(operator)}
+  rescue ArgumentError ->
+    {:error, convert_error_message(operator)}
   end
 
   defp convert_error_message(var) do
-    ["Cannot convert '" <> inspect(var) <> "' to integer\n"]
+    ["Cannot convert '" <> inspect(var) <> "' to float\n"]
   end
 end

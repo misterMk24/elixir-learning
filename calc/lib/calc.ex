@@ -3,7 +3,7 @@ defmodule Calc do
   Simple Calculator implementation with User input.
 
   Usage example:
-      Calc.start()
+      Calc.loop()
         Enter your expression:
         1+2
         Result: 3.0
@@ -12,19 +12,19 @@ defmodule Calc do
         exit
         See you!
   """
-  @spec start() :: :ok
-  def start() do
+  @spec loop() :: :ok
+  def loop do
     input = IO.gets("Enter your expression:\n") |> String.trim()
     with {:ok, _} <- Helpers.exit_command?(input),
          {:ok, parsed_input} <- Helpers.parse_input(input),
          {:ok, {var1, operator, var2}} <- Helpers.convert_data(parsed_input),
          {:ok, result} <- calculate(operator, var1, var2) do
            IO.puts("Result: " <> inspect(result) <> "\n")
-           start()
+           loop()
     else
       {:error, message} ->
         IO.puts(message)
-        start()
+        loop()
 
       {:exit, exit_message} -> IO.puts(exit_message)
     end
@@ -45,7 +45,5 @@ defmodule Calc do
 
   @spec calculate(:/, number(), 0) :: {:error, String.t()}
   defp calculate(:/, _, var2) when var2 == 0, do: {:error, "you cannot divide by 0"}
-
-  @spec calculate(:/, number(), number()) :: {:ok, float()}
   defp calculate(:/, var1, var2), do: {:ok, var1 / var2}
 end

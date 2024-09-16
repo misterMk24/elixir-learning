@@ -63,7 +63,7 @@ defmodule HelpersTest do
 
     test "when first variable is incorrect" do
       input = {":a", "*", "2"}
-      expected_result = ["Cannot convert '\":a\"' to integer\n"]
+      expected_result = ["Cannot convert '\":a\"' to float\n"]
       result = Helpers.convert_data(input)
 
       assert result == {:error, expected_result}
@@ -71,7 +71,15 @@ defmodule HelpersTest do
 
     test "when second variable is incorrect" do
       input = {"1", "*", "{3, 2, 1}"}
-      expected_result = ["Cannot convert '\"{3, 2, 1}\"' to integer\n"]
+      expected_result = ["Cannot convert '\"{3, 2, 1}\"' to float\n"]
+      result = Helpers.convert_data(input)
+
+      assert result == {:error, expected_result}
+    end
+
+    test "when converting to float is failed" do
+      input = {"1", "*", "12.2asd}"}
+      expected_result = "trailing garbage in ‹12.2›"
       result = Helpers.convert_data(input)
 
       assert result == {:error, expected_result}
@@ -79,7 +87,7 @@ defmodule HelpersTest do
 
     test "when operator is incorrect" do
       input = {"1", "hello world", "3"}
-      expected_result = ["Cannot convert '\"hello world\"' to integer\n"]
+      expected_result = ["Cannot convert '\"hello world\"' to float\n"]
       result = Helpers.convert_data(input)
 
       assert result == {:error, expected_result}
