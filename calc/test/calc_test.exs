@@ -28,12 +28,12 @@ defmodule CalcTest do
     test "loop/0 with invalid input" do
       values = [
         {:input, "1 ++ 3\n", :output, "incorrect input has been provided\n"},
-        {:input, "1 + first_value\n", :output, "Cannot convert '\"first_value\"' to float\n\n"},
-        {:input, "2 * second_value\n", :output, "Cannot convert '\"second_value\"' to float\n\n"},
-        {:input, "IncorrectF * incorrect_s\n", :output, "Cannot convert '\"IncorrectF\"' to float\n\n"},
+        {:input, "1 + first_value\n", :output, "Unexpected input: '\"first_value\"'\n"},
+        {:input, "2 * second_value\n", :output, "Unexpected input: '\"second_value\"'\n"},
+        {:input, "IncorrectF * incorrect_s\n", :output, "Unexpected input: '\"IncorrectF\"'\n"},
         {:input, "10 / 0\n", :output, "you cannot divide by 0\n"},
-        {:input, "0 / dummy_value\n", :output, "Cannot convert '\"dummy_value\"' to float\n\n"},
-        {:input, "4 - o\n", :output, "Cannot convert '\"o\"' to float\n\n"},
+        {:input, "0 / dummy_value\n", :output, "Unexpected input: '\"dummy_value\"'\n"},
+        {:input, "4 - o\n", :output, "Unexpected input: '\"o\"'\n"},
       ]
       exit_input = "exit\n"
 

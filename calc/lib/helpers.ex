@@ -68,6 +68,6 @@ defmodule Helpers do
   end
 
   defp convert_error_message(var) do
-    ["Cannot convert '" <> inspect(var) <> "' to float\n"]
+    "Unexpected input: '" <> inspect(var) <> "'"
   end
 end

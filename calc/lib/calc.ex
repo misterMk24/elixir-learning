@@ -43,7 +43,7 @@ defmodule Calc do
   @spec calculate(:*, number(), number()) :: {:ok, float()}
   defp calculate(:*, var1, var2), do: {:ok, var1 * var2}
 
-  @spec calculate(:/, number(), 0) :: {:error, String.t()}
+  @spec calculate(:/, number(), number()) :: {:ok, float()} | {:error, String.t()}
   defp calculate(:/, _, var2) when var2 == 0, do: {:error, "you cannot divide by 0"}
   defp calculate(:/, var1, var2), do: {:ok, var1 / var2}
 end
